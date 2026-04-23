@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mana-Niru — Website Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #1565C0;
+      --primary-dark: #0D47A1;
+      --primary-light: #1976D2;
+      --accent: #42A5F5;
+      --accent-light: #90CAF9;
+      --bg: #E3F2FD;
+      --white: #FFFFFF;
+      --text: #0D1B2A;
+      --text-muted: #546E7A;
+      --border: #BBDEFB;
+      --success: #2E7D32;
+      --success-bg: #E8F5E9;
+      --danger: #C62828;
+      --danger-bg: #FFEBEE;
+      --shadow: 0 4px 20px rgba(21, 101, 192, 0.15);
+      --shadow-lg: 0 12px 40px rgba(21, 101, 192, 0.22);
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-light) 60%, var(--accent) 100%);
+      padding: 3rem 2rem 4rem;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    .header-logo {
+      width: 80px;
+      height: 80px;
+      background: rgba(255,255,255,0.2);
+      border: 3px solid rgba(255,255,255,0.4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      margin: 0 auto 1.25rem;
+      position: relative;
+    }
+    header h1 { font-size: 2.6rem; font-weight: 800; letter-spacing: -1px; position: relative; }
+    header p { font-size: 1rem; opacity: 0.88; margin-top: 0.4rem; position: relative; }
+
+    /* ── Status bar ── */
+    .status-bar {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      font-size: 0.82rem;
+      flex-wrap: wrap;
+    }
+    .status-item { display: flex; align-items: center; gap: 6px; }
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #9E9E9E;
+      flex-shrink: 0;
+      transition: background 0.3s;
+    }
+    .dot.online { background: var(--success); box-shadow: 0 0 6px rgba(46,125,50,0.5); }
+    .dot.offline { background: var(--danger); }
+    .status-label { color: var(--text-muted); }
+    .status-val { font-weight: 600; }
+
+    /* ── Main ── */
+    main {
+      max-width: 960px;
+      margin: -2rem auto 0;
+      padding: 0 1.5rem 3rem;
+      position: relative;
+    }
+
+    /* ── Cards ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .portal-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 2px solid var(--border);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: all 0.25s;
+    }
+    .portal-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--accent); }
+
+    .portal-card-top {
+      padding: 2rem 2rem 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .card-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+    .card-icon.blue { background: var(--bg); }
+    .card-icon.purple { background: #F3E5F5; }
+    .card-icon.green { background: var(--success-bg); }
+
+    .card-info h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .card-info p { font-size: 0.84rem; color: var(--text-muted); line-height: 1.5; }
+
+    .card-links {
+      padding: 0 1.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .link-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      border: 2px solid transparent;
+    }
+    .link-btn .link-left { display: flex; align-items: center; gap: 8px; }
+    .link-btn .arrow { font-size: 0.8rem; opacity: 0.6; transition: opacity 0.2s, transform 0.2s; }
+    .link-btn:hover .arrow { opacity: 1; transform: translateX(3px); }
+
+    .link-btn.primary {
+      background: var(--primary);
+      color: white;
+    }
+    .link-btn.primary:hover { background: var(--primary-dark); }
+
+    .link-btn.outline {
+      background: transparent;
+      color: var(--primary);
+      border-color: var(--border);
+    }
+    .link-btn.outline:hover { background: var(--bg); border-color: var(--accent); }
+
+    .link-btn.admin {
+      background: #4A148C;
+      color: white;
+    }
+    .link-btn.admin:hover { background: #38006B; }
+
+    .link-btn.admin-outline {
+      background: transparent;
+      color: #4A148C;
+      border-color: #E1BEE7;
+    }
+    .link-btn.admin-outline:hover { background: #F3E5F5; border-color: #CE93D8; }
+
+    /* ── Setup section ── */
+    .setup-card {
+      background: white;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+    .setup-header {
+      background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+      padding: 1rem 1.5rem;
+      color: white;
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .setup-body { padding: 1.5rem; }
+
+    .steps { display: flex; flex-direction: column; gap: 1rem; }
+    .step { display: flex; gap: 1rem; align-items: flex-start; }
+    .step-num {
+      width: 28px;
+      height: 28px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .step-content h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .step-content p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+
+    code {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2px 7px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.8rem;
+      color: var(--primary-dark);
+    }
+
+    pre {
+      background: #0D1B2A;
+      color: #90CAF9;
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.25rem;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.82rem;
+      line-height: 1.7;
+      margin-top: 0.5rem;
+      overflow-x: auto;
+      position: relative;
+    }
+    pre .comment { color: #546E7A; }
+    pre .cmd { color: #80CBC4; }
+
+    /* ── Credentials ── */
+    .creds-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+    }
+    .cred-item {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1rem;
+    }
+    .cred-label { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .cred-value { font-weight: 700; font-size: 0.95rem; color: var(--primary-dark); }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      border-top: 1px solid var(--border);
+      margin-top: 1rem;
+    }
+    footer strong { color: var(--primary); }
+
+    .tag {
+      display: inline-block;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-logo">💧</div>
+    <h1>Mana-Niru</h1>
+    <p>Water Bottle Ordering — Website Portal</p>
+  </header>
+
+  <div class="status-bar">
+    <div class="status-item">
+      <div class="dot" id="dot-server"></div>
+      <span class="status-label">Mana-Niru Server (port 3001):</span>
+      <span class="status-val" id="status-server">Checking...</span>
+    </div>
+    <button onclick="checkStatus()" style="padding:4px 12px; border:1px solid var(--border); background:white; border-radius:6px; cursor:pointer; font-size:0.78rem; font-weight:600; color:var(--primary);">↻ Refresh</button>
+  </div>
+
+  <main>
+    <div class="cards-grid">
+
+      <!-- Customer Store -->
+      <div class="portal-card">
+        <div class="portal-card-top">
+          <div class="card-icon blue">🛒</div>
+          <div class="card-info">
+            <h2>Customer Storefront</h2>
+            <p>Public-facing shop where customers browse and order Mana-Niru water bottles.</p>
+          </div>
+        </div>
+        <div class="card-links">
+          <a class="link-btn primary" href="http://localhost:3001" target="_blank">
+            <span class="link-left">🏠 Open Home Page</span>
+            <span class="arrow">→</span>
+          </a>
+          <a class="link-btn outline" href="http://localhost:3001/checkout" target="_blank">
+            <span class="link-left">🛍 Go to Checkout</span>
+            <span class="arrow">→</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Admin Panel -->
+      <div class="portal-card">
+        <div class="portal-card-top">
+          <div class="card-icon purple">⚙️</div>
+          <div class="card-info">
+            <h2>Admin Panel</h2>
+            <p>Manage orders, update delivery status, view revenue, and change your password.</p>
+          </div>
+        </div>
+        <div class="card-links">
+          <a class="link-btn admin" href="http://localhost:3001/admin" target="_blank">
+            <span class="link-left">🔐 Admin Login</span>
+            <span class="arrow">→</span>
+          </a>
+          <a class="link-btn admin-outline" href="http://localhost:3001/admin/dashboard" target="_blank">
+            <span class="link-left">📊 Dashboard (if logged in)</span>
+            <span class="arrow">→</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Admin Credentials -->
+    <div class="setup-card">
+      <div class="setup-header">🔑 Admin Credentials</div>
+      <div class="setup-body">
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.75rem;">
+          Default credentials — you will be prompted to change the password on first login.
+        </p>
+        <div class="creds-grid">
+          <div class="cred-item">
+            <div class="cred-label">Username</div>
+            <div class="cred-value">admin</div>
+          </div>
+          <div class="cred-item">
+            <div class="cred-label">Password (default)</div>
+            <div class="cred-value">admin</div>
+          </div>
+          <div class="cred-item">
+            <div class="cred-label">Website URL</div>
+            <div class="cred-value"><a href="http://localhost:3001" target="_blank" style="color:var(--primary);text-decoration:none;">localhost:3001</a></div>
+          </div>
+          <div class="cred-item">
+            <div class="cred-label">Admin URL</div>
+            <div class="cred-value"><a href="http://localhost:3001/admin" target="_blank" style="color:var(--primary);text-decoration:none;">localhost:3001/admin</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- How to Run -->
+    <div class="setup-card">
+      <div class="setup-header">🚀 How to Start the Website</div>
+      <div class="setup-body">
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <h4>Add your Stripe API keys</h4>
+              <p>
+                Get your test keys from <strong>dashboard.stripe.com → API Keys</strong><br />
+                Set <code>STRIPE_SECRET_KEY</code> in <code>server/.env</code><br />
+                Set <code>VITE_STRIPE_PUBLISHABLE_KEY</code> in <code>client/.env</code>, then rebuild:
+              </p>
+              <pre><span class="cmd">cd client && npm run build</span></pre>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <h4>Start the server — that's it!</h4>
+              <p>One terminal, one command. The server serves both the API and the website.</p>
+              <pre><span class="cmd">cd server && npm run dev</span></pre>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <h4>Click any link above to open the website</h4>
+              <p>The status indicator at the top will turn <strong style="color:var(--success)">green</strong> when the server is running. All links go to <code>localhost:3001</code>.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pricing -->
+    <div class="setup-card">
+      <div class="setup-header">💰 Pricing</div>
+      <div class="setup-body">
+        <div class="creds-grid">
+          <div class="cred-item">
+            <div class="cred-label">500ml Case</div>
+            <div class="cred-value">₹80 / case</div>
+          </div>
+          <div class="cred-item">
+            <div class="cred-label">1 Litre Case</div>
+            <div class="cred-value">₹95 / case</div>
+          </div>
+          <div class="cred-item">
+            <div class="cred-label">Payment Gateway</div>
+            <div class="cred-value">Stripe (INR)</div>
+          </div>
+          <div class="cred-item">
+            <div class="cred-label">GitHub Repo</div>
+            <div class="cred-value"><a href="https://github.com/saikiran146/mana-niru" target="_blank" style="color:var(--primary); text-decoration:none;">saikiran146/mana-niru</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <strong>Mana-Niru</strong> Water Bottle Ordering App &nbsp;·&nbsp; Built with React + Node.js + Stripe
+  </footer>
+
+  <script>
+    async function checkStatus() {
+      let serverOk = false
+      try {
+        const res = await fetch('http://localhost:3001/api/admin/me', { cache: 'no-store' })
+        serverOk = res.status !== 0
+      } catch { serverOk = false }
+
+      const dotS = document.getElementById('dot-server')
+      const statS = document.getElementById('status-server')
+
+      dotS.className = 'dot ' + (serverOk ? 'online' : 'offline')
+      statS.textContent = serverOk ? 'Online ✓' : 'Offline — run npm run dev in server/'
+      statS.style.color = serverOk ? 'var(--success)' : 'var(--danger)'
+
+      dotS.className = 'dot ' + (serverOk ? 'online' : 'offline')
+      statS.textContent = serverOk ? 'Online ✓  — links are active' : 'Offline — run: cd server && npm run dev'
+      statS.style.color = serverOk ? 'var(--success)' : 'var(--danger)'
+    }
+
+    checkStatus()
+    setInterval(checkStatus, 10000)
+  </script>
+
+</body>
+</html>
